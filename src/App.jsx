@@ -20,6 +20,22 @@ function App() {
     )
   }
 
+  const onDecrement = (id) => {
+    setCounts(prevCounts =>
+      prevCounts.map(item =>
+        item.id === id ? { ...item, value: item.value - 1 } : item
+      )
+    )
+  }
+
+  const onReset = (id) => {
+    setCounts(prevCounts =>
+      prevCounts.map(item =>
+        item.id === id ? { ...item, value: item.value = 0 } : item
+      )
+    )
+  }
+
   // 배열에 새로운 카운터 값을 추가 (초기값 0)
   const onAddCounter = () => {
     setCounts(prevCounts => [...prevCounts, { id: crypto.randomUUID(), value: 0 }])
@@ -48,6 +64,8 @@ function App() {
             key={item.id} // UUID를 key로 사용   <- 제일 중요한 부분 !!
             count={item.value}
             onIncrement={() => { onIncrement(item.id) }}
+            onDecrement={() => { onDecrement(item.id) }}
+            onReset={() => { onReset(item.id) }}
             onRemove={() => { onRemoveCounter(item.id) }}
           />
         ))
@@ -56,7 +74,7 @@ function App() {
   )
 }
 
-function Counter({ count, onIncrement, onRemove }) {
+function Counter({ count, onIncrement, onDecrement, onReset, onRemove }) {
   const [bgColor, setBgColor] = useState(
       () => '#' + Math.floor(Math.random()*16777215)
         .toString(16)
@@ -68,6 +86,12 @@ function Counter({ count, onIncrement, onRemove }) {
       <h1>Counter: {count}</h1>
       <button onClick={onIncrement}>
         증가
+      </button>
+      <button onClick={onDecrement}>
+        감소
+      </button>
+      <button onClick={onReset}>
+        초기화
       </button>
       <button onClick={onRemove}>
         제거
